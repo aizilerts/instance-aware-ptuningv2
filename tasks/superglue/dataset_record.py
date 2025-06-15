@@ -2,7 +2,8 @@ import torch
 from torch.utils import data
 from torch.utils.data import Dataset
 from datasets.arrow_dataset import Dataset as HFDataset
-from datasets.load import load_dataset, load_metric
+from datasets.load import load_dataset
+import evaluate
 from transformers import (
     AutoTokenizer,
     DataCollatorWithPadding,
@@ -148,7 +149,7 @@ class SuperGlueDatasetForRecord(SuperGlueDataset):
                 desc="Running tokenizer on validation dataset",
             )
             
-        self.metric = load_metric("super_glue", data_args.dataset_name)
+        self.metric = evaluate.load("super_glue", data_args.dataset_name)
 
         self.data_collator = DataCollatorForMultipleChoice(tokenizer)
         # if data_args.pad_to_max_length:

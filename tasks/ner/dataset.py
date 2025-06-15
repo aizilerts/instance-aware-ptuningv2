@@ -2,7 +2,8 @@ import torch
 from torch.utils import data
 from torch.utils.data import Dataset
 from datasets.arrow_dataset import Dataset as HFDataset
-from datasets.load import load_dataset, load_metric
+from datasets.load import load_dataset
+import evaluate
 from transformers import AutoTokenizer, DataCollatorForTokenClassification, AutoConfig
 import numpy as np
 
@@ -58,7 +59,7 @@ class NERDataset():
 
         self.data_collator = DataCollatorForTokenClassification(self.tokenizer, pad_to_multiple_of=8 if training_args.fp16 else None)
 
-        self.metric = load_metric('seqeval')
+        self.metric = evaluate.load('seqeval')
         
 
     def compute_metrics(self, p):

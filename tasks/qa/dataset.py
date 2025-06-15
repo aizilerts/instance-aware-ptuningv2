@@ -2,7 +2,8 @@ import torch
 from torch.utils.data.sampler import RandomSampler, SequentialSampler
 from torch.utils.data import DataLoader
 from datasets.arrow_dataset import Dataset as HFDataset
-from datasets.load import load_metric, load_dataset
+from datasets.load import load_dataset
+import evaluate
 from transformers import AutoTokenizer, DataCollatorForTokenClassification, BertConfig
 from transformers import default_data_collator, EvalPrediction
 import numpy as np
@@ -59,7 +60,7 @@ class SQuAD:
 
         self.data_collator = default_data_collator
 
-        self.metric = load_metric(data_args.dataset_name)
+        self.metric = evaluate.load(data_args.dataset_name)
 
     def prepare_train_dataset(self, examples):
         examples['question'] = [q.lstrip() for q in examples['question']]

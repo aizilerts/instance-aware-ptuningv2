@@ -2,7 +2,8 @@ import torch
 from torch.utils import data
 from torch.utils.data import Dataset
 from datasets.arrow_dataset import Dataset as HFDataset
-from datasets.load import load_dataset, load_metric
+from datasets.load import load_dataset
+import evaluate
 from transformers import (
     AutoTokenizer,
     DataCollatorWithPadding,
@@ -85,8 +86,8 @@ class GlueDataset():
             if data_args.max_predict_samples is not None:
                 self.predict_dataset = self.predict_dataset.select(range(data_args.max_predict_samples))
 
-        self.metric = load_metric("glue", data_args.dataset_name)
-
+        self.metric = evaluate.load("glue", data_args.dataset_name)
+        
         if data_args.pad_to_max_length:
             self.data_collator = default_data_collator
         elif training_args.fp16:
